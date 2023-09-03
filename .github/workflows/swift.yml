@@ -1,11 +1,11 @@
 name: Swift CI/CD Build
 
 on:
-  commit:
+  #commit:
   push:
     branches:
       - master
-  pull-request:
+    #pull-request:
   
 jobs:
   build:

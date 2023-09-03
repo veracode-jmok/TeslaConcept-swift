@@ -1,0 +1,50 @@
+name: Swift CI/CD Build
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Navigate and list available schemes and SDKs
+      run: |
+        cd iGoat-Swift
+        xcodebuild -list 
+        xcodebuild -showsdks
+        ls -la **/**
+
+    - name: Install CocoaPods dependencies
+      run: |
+        cd iGoat-Swift
+        pod install
+
+    - name: Archive the Xcode project
+      run: |
+        cd iGoat-Swift
+        xcodebuild archive -workspace Tesla.xcworkspace -configuration Debug -scheme iGoat-Swift -destination generic/platform=iOS DEBUG_INFORMATION_FORMAT=dwarf-with-dsym -archivePath iGoat.xcarchive CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO ENABLE_BITCODE=NO | tee build_log.txt
+        ls -la
+
+    - name: Generate IR for Veracode and create ZIP
+      run: |
+        cd iGoat-Swift
+        brew tap veracode/tap
+        brew install gen-ir
+        gen-ir build_log.txt iGoat.xcarchive --project-path iGoat-Swift.xcodeproj
+        ls -la iGoat.xcarchive
+        zip -r iGoat.zip iGoat.xcarchive
+        mv iGoat.zip ../iGoat.zip
+        cd ../
+        pwd
+        ls -la
+
+    # The Veracode task needs to be handled differently as there might not be a direct GitHub Action for it.
+    # We'll leave a placeholder for now and provide guidance afterward.
+    - name: Veracode analysis (Placeholder)
+      run: echo "Veracode analysis should be handled here."

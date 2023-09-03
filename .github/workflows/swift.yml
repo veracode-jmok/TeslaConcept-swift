@@ -13,17 +13,17 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Navigate and list available schemes and SDKs
-      run: |
-        cd tesla
-        xcodebuild -list 
-        xcodebuild -showsdks
-        ls -la **/**
+ #   - name: Navigate and list available schemes and SDKs
+ #     run: |
+ #       cd tesla
+    #    xcodebuild -list 
+       # xcodebuild -showsdks
+     #   ls -la **/**
 
-    - name: Install CocoaPods dependencies
-      run: |
-        cd tesla
-        pod install
+   # - name: Install CocoaPods dependencies
+  #    run: |
+   #     cd tesla
+    #    pod install
 
     - name: Archive the Xcode project
       run: |

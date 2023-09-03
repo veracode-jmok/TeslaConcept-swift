@@ -35,7 +35,6 @@ jobs:
 
     - name: Generate IR for Veracode and create ZIP
       run: |
-   #     cd tesla
         brew tap veracode/tap
         brew install gen-ir
         gen-ir build_log.txt tesla.xcarchive --project-path tesla.xcodeproj

@@ -31,16 +31,16 @@ jobs:
       run: |
         cd tesla
         xcodebuild archive -workspace tesla.xcworkspace -configuration Debug -scheme tesla -destination generic/platform=iOS DEBUG_INFORMATION_FORMAT=dwarf-with-dsym -archivePath tesla.xcarchive CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO ENABLE_BITCODE=NO | tee build_log.txt
-        ls -la
+        ls && pwd
 
     - name: Generate IR for Veracode and create ZIP
       run: |
+        cd ../
         brew tap veracode/tap
         brew install gen-ir
         gen-ir build_log.txt tesla.xcarchive --project-path tesla.xcodeproj
         ls -la tesla.xcarchive
         zip -r tesla.zip tesla.xcarchive
         mv tesla.zip ../tesla.zip
-        cd ../
-        pwd
-        ls -la
+
+        ls && pwd
